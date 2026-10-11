@@ -1,0 +1,46 @@
+GP161-ESP32 v3.1 - TESTOVACI POSTUP (Allamat 296, AUDIO AFSK)
+=============================================================
+Poznamka: PTT radio testovat iba s antenou / umelou zatazou a s overenym
+zapojenim konektora. Vysielanie musi byt v sulade s predpismi pasma.
+
+[ ] 01. Rozbalit ZIP tak, aby GP161_ESP32_v31.ino bol v priecinku GP161_ESP32_v31.
+[ ] 02. Nainstalovat esp32 core, Adafruit GFX, Adafruit ILI9341 a BusIO podla README.
+[ ] 03. Arduino IDE -> ESP32 Dev Module -> Verify/Overit (vysledok zaznamenat).
+[ ] 04. Odpojit radio. Nahrat na ESP32, 115200 Serial Monitor.
+[ ] 05. Pri starte logo OM8AWA 3 sekundy, potom MONITOR.
+[ ] 06. F1-F5, Alt+M, Esc, Alt+U spravne prepina obrazovky.
+[ ] 07. microSD: citanie TXT, otvorenie suboru, :SDTEST, :FILETEST.
+[ ] 08. SETUP: Packet baud, Enter 1200 -> 300, restart ESP32 -> ulozene v NVS.
+[ ] 09. :TESTALL – protokolovy test, SD/NVS (len ak prislusne zariadenia su zapojene).
+[ ] 10. Bez radia: na GPIO34 overit DC predpatie cca 1.65 V cez 10k+10k.
+[ ] 11. Osciloskop: GPIO25 DAC audio 1200/2200 Hz pri :ARM a :BEACONTEST.
+[ ] 12. PTT vypnute po starte. Overit Q1 BC547 mimo radia cez :ARM a :PTTTEST (150 ms).
+[ ] 13. Overit ALLAMAT MIC GND/RX/PTT/MIC skutocnou schemou a meranim.
+[ ] 14. Overit RX audio zdroj – NIE pin RX z mikrofonoveho konektora.
+[ ] 15. AUDIO IN nesmie mat mimo 0..3.3 V ani pri najvyssej hlasitosti.
+[ ] 16. RX test s overenou druhou stanicou 1200Bd FM: :AUDIOSTATUS, RX+CRC.
+[ ] 17. PTT cez jeden BC547 a velmi slabu modulaciu. Vyslat :BEACONTEST len po overeni.
+[ ] 18. Druha stanica ma prijat dobry AX.25 frame so spravnym FCS.
+[ ] 19. Skusit spojenie na QSO F1, potom ostatne F2-F5.
+[ ] 20. Skusit AutoBIN na SD a kontrolu prijatych binarnych suborov.
+[ ] 21. 300Bd: testovat najskor umelymi audio signalmi, na SSB stanici podla normy.
+[ ] 22. :DISARM, skontrolovat, ze PTT zostava LOW po restarte.
+
+Ak kompilacia neprejde, uloz cely vypis Arduino IDE a presnu verziu
+ESP32 core / Arduino IDE. Ak RF dekodovanie zlyhava, poznamenaj ADC hodnoty,
+pocty bad CRC, casove priebehy DAC a PTT a typ audio vystupu radia.
+POZOR: softverovy task 9600Hz bez DMA ma obmedzenu stabilitu casovania.
+
+PTT BC547: Pred RF testom zmeraj pin GPIO27 LOW v klude, HIGH iba na :PTTTEST,
+skontroluj PTT napatie/prud a na kolektore Q1 nulove spojenie s GND v TX.
+
+HISTORIA (v3.2)
+----------------
+1. V SETUP nastav QSO Log, Monitor Log, Restore History na ON.
+2. Na SD by mali vzniknut /GP/LOGS/MONITOR.LOG, CH1.LOG az CH5.LOG
+   pri prvej novej udalosti na prislusnom kanali.
+3. Po vypnuti a zapnuti displej opat zobrazi posledne riadky.
+4. Otestuj QSO Log OFF (nove riadky na SD nepribudaju).
+5. Otestuj Restore History OFF (po restarte sa starsie riadky nenacitaju).
+6. Fyzicke AX.25 spojenie sa po restarte NIKDY samo neobnovi.
+7. Vyskusaj start bez vlozenej SD; program musi ostat pouzitelny.

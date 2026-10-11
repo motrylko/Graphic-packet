@@ -1,0 +1,13 @@
+GP161-ESP32 v3.4 - vydanie 10.10.2026
+
+Zmenene proti v3.2:
+- Zmenene vykreslovanie Alt+M a SETUP podla schvalenych nahladov v3.3.
+- Nova klasicka horna lista, ikony spodnej listy, 2 strany SETUP.
+- 11 nastaveni, zachovane prepinanie rychlosti 1200/300 Baud.
+- Zachovane MYCALL, logy, automaticke obnovenie historie, BC547 PTT.
+- Zachovane logo OM8AWA po 3 sekundy.
+- PDF manual aktualizovany na 21 stran pre verziu 3.4.
+
+Testy: 216 AX25 + 184 AFSK + historia + splash mock: PASS.
+C++ Arduino mock: PASS, ale kompilacia ESP32 CORE a fyzicky test: NIE.
+Texty a obrazky v nahladoch su ilustacne, MYCALL si nastav v SETUP.
