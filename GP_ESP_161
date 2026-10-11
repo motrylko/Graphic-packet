@@ -964,7 +964,9 @@ void setup() {
   addMonitor("SYS> Internal AFSK RX 1200/300; TX locked");
   addMonitor("SYS> AX25/HDLC CRC core ready");
   bay::setBaud(packetBaud);
-  bay::begin();
+  // Temporary watchdog isolation test: keep the audio backend stopped.
+  // Restore bay::begin() after confirming whether this prevents the reboot.
+  // bay::begin();
   page=Page::Monitor;paint();
 
   // PS/2: use a TRUE bidirectional open-drain compatible level shifter.
