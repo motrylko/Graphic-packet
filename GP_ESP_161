@@ -1,5 +1,5 @@
 /*
-  GP161-ESP32 v3.4.1 CLASSIC MENU + AUDIO AFSK -- OM8AWA SPLASH, internal software TNC.
+  GP161-ESP32 v3.4.1 CLASSIC MENU + AUDIO AFSK -- OM8ADF SPLASH, internal software TNC.
   ESP32-WROOM-32 DevKit 30pin, ILI9341 320x240, PS/2 keyboard, microSD SPI.
   ADC GPIO34 / DAC GPIO25 / GPIO27 to 4k7 -> BC547 transistor PTT-to-GND.
 
@@ -171,6 +171,11 @@ void drawBootLogo() {
 
 void showBootLogo() {
   drawBootLogo();
+  tft.fillRect(45, 104, 230, 28, tft.color565(0, 7, 20));
+  tft.setTextSize(3);
+  tft.setTextColor(tft.color565(0, 220, 255));
+  tft.setCursor(106, 108);
+  tft.print("OM8ADF");
   delay(3000);
 }
 
