@@ -1,6 +1,3 @@
-#ifndef GP_ESP_161_SKETCH
-#define GP_ESP_161_SKETCH
-
 /*
   GP161-ESP32 v3.4.1 CLASSIC MENU + AUDIO AFSK -- OM8ADF SPLASH, internal software TNC.
   ESP32-WROOM-32 DevKit 30pin, ILI9341 320x240, PS/2 keyboard, microSD SPI.
@@ -1003,5 +1000,3 @@ void loop() {
   if(page==Page::KeyboardTest){static uint32_t lastRedraw=0;if(millis()-lastRedraw>400){lastRedraw=millis();drawKeyboardTest();}}
   delay(1);
 }
-
-#endif // GP_ESP_161_SKETCH
