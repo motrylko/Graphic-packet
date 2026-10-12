@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_HISTORY_H
+#define GP161_HISTORY_H
 // GP161-ESP32 v3.2 - persistence on microSD (FAT filesystem).
 // The live windows show 10 QSO / 36 monitor lines; disk logs are longer.
 // Logging is synchronous on the main loop (never from a PS/2 ISR).
@@ -82,3 +83,5 @@ inline void gpRestoreHistory(){
   }
   historyRestoring=false;
 }
+
+#endif // GP161_HISTORY_H

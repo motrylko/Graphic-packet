@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_OM8AWA_LOGO_H
+#define GP161_OM8AWA_LOGO_H
 #include <Arduino.h>
 
 constexpr uint16_t OM8AWA_LOGO_W = 320;
@@ -6406,3 +6407,5 @@ const uint16_t OM8AWA_LOGO[OM8AWA_LOGO_W * OM8AWA_LOGO_H] PROGMEM = {
   0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
 
 };
+
+#endif // GP161_OM8AWA_LOGO_H

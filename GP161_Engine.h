@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_ENGINE_H
+#define GP161_ENGINE_H
 // Provisional protocol implementation for GP161-ESP32 v3.0.
 // Stop-and-wait AX.25 modulo-8 (one outstanding I frame per channel).
 // Internal AFSK backend experimental; host tests are NOT physical RF tests.
@@ -405,3 +406,5 @@ inline void serialDiagnostics(){
     if(n<sizeof(buf)-1)buf[n++]=(char)c;else n=0;
   }
 }
+
+#endif // GP161_ENGINE_H

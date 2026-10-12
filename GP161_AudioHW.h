@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_AUDIOHW_H
+#define GP161_AUDIOHW_H
 // GP161 v3.1: internal 1200/300 AFSK laboratory audio backend.
 // Hardware: GPIO34 ADC1, GPIO25 ESP32 DAC1, GPIO27 -> 4k7 -> BC547 base.
 // 100k base-to-emitter; emitter GND, collector to VERIFIED PTT/GND-switch input.
@@ -128,3 +129,5 @@ inline bool pttPulse(unsigned durationMs){
   digitalWrite(PTT,HIGH);delay(durationMs);digitalWrite(PTT,LOW);return true;
 }
 } // namespace bay
+
+#endif // GP161_AUDIOHW_H

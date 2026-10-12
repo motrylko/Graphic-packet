@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_AFSK_DSP_H
+#define GP161_AFSK_DSP_H
 // GP161 v3.1 - original experimental audio AFSK DSP (no Arduino dependency).
 // 9600 samples per second, phase-continuous 1200/2200 and 1600/1800 Hz.
 // Software modem laboratory prototype. Real RF BER must be validated.
@@ -82,3 +83,5 @@ public:
   uint32_t symbolCount()const{return symbols;}
 };
 } // namespace audio_dsp
+
+#endif // GP161_AFSK_DSP_H

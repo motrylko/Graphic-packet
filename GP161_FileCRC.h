@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_FILECRC_H
+#define GP161_FILECRC_H
 // AutoBIN experimental CCITT-0 checksum (NOT AX.25/X.25 FCS).
 #include <stdint.h>
 inline uint16_t autoBinCrcStep(uint16_t crc, uint8_t b) {
@@ -7,3 +8,5 @@ inline uint16_t autoBinCrcStep(uint16_t crc, uint8_t b) {
     crc=(uint16_t)((crc<<1)^((crc & 0x8000U)?0x1021U:0));
   return crc;
 }
+
+#endif // GP161_FILECRC_H

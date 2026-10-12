@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_AX25_H
+#define GP161_AX25_H
 // GP161-ESP32 independent AX.25/HDLC core; original implementation, MIT license.
 // All HDLC bits are LSB-first. CRC-16/X.25 (poly reversed 0x8408).
 #include <stdint.h>
@@ -130,3 +131,5 @@ struct Deframer {
   bool feedLevel(uint8_t level,Frame &ready){uint8_t bit=(level==lastLevel);lastLevel=level;return feedBit(bit,ready);}
 };
 } // namespace gp
+
+#endif // GP161_AX25_H

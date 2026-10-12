@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GP161_DIAGNOSTICS_H
+#define GP161_DIAGNOSTICS_H
 // GP161-ESP32 v3.1 diagnostics: internal AFSK RX, TX locked by default.
 // Arduino code; doesn't modify the user's files except controlled test paths.
 
@@ -217,3 +218,5 @@ inline void processDiagnosticSelection(uint8_t selection){
  }
  paint();
 }
+
+#endif // GP161_DIAGNOSTICS_H
