@@ -964,6 +964,9 @@ void setup() {
   addMonitor("SYS> AX25/HDLC CRC core ready");
   bay::setBaud(packetBaud);
   bay::begin();
+  // Keep boot/status entries in the SD log, but start the live display empty.
+  memset(monitorLines,0,sizeof(monitorLines));
+  monitorUsed=0;
   page=Page::Monitor;paint();
 
   // PS/2: use a TRUE bidirectional open-drain compatible level shifter.
