@@ -359,7 +359,7 @@ inline void serialDiagnostics(){
         processDiagnosticSelection(7);paint();
       } else if(strcmp(buf,":BAYSTATUS")==0 || strcmp(buf,":AUDIOSTATUS")==0){
         Serial.printf("AUDIO AFSK backend=%s baud=%u armed=%u rxTransitions=%lu rxOverflow=%lu good=%lu badFCS=%lu ADC=%d TX=%lu\n",
-            "AFSK AUDIO",(unsigned)packetBaud,
+            bay::available()?"I2S DMA READY":"I2S DMA ERROR",(unsigned)packetBaud,
             (unsigned)radioArmed(),(unsigned long)bay::edges(),(unsigned long)bay::overflow(),
             (unsigned long)decoder.good,(unsigned long)decoder.badFcs,bay::auxInput(),(unsigned long)txFrames);
         page=Page::Port;paint();

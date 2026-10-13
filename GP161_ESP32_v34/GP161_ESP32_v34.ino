@@ -4,7 +4,7 @@
   ADC GPIO34 / DAC GPIO25 / GPIO27 to 4k7 -> BC547 transistor PTT-to-GND.
 
   EXPERIMENTAL v3.4: not a verified complete replica of original GP1.61.
-  AX.25 codec and audio waveform DSP tested on desktop. Real ADC/DAC timing,
+  AX.25 codec and audio waveform DSP tested on desktop. I2S ADC/DAC DMA timing,
   connected-mode, AutoBIN interoperability and RF need physical validation.
   Software AFSK receive active; transmitting requires USB :ARM for five minutes.
   DO NOT CONNECT RADIO AUDIO OR PTT DIRECTLY WITHOUT ANALOG LEVEL ADAPTER!

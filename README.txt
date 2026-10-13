@@ -12,9 +12,9 @@ UPOZORNENIE K TESTOVANIU
 -----------------------
 - RX/TX AFSK algoritmus bol testovany iba na generovanych digitalnych audio vzorkach.
 - Testy nepreukazuju skutocnu kvalitu RX/TX ani frekvencnu stabilitu ADC/DAC.
-- Audio modem pouziva periodicku ulohu esp_timer (104 us ~9615 Hz) v task kontexte,
-  nie ADC/DAC DMA. V prevadzke moze dochadzat k jitteru a strate vzoriek.
-  WiFi/BT nespustat, vysielanie a QSO su EXPERIMENTALNE.
+- Audio modem pouziva I2S ADC/DAC DMA s buffermi 96 vzoriek; AFSK DSP bezi
+  v blokovacej ulohe FreeRTOS, nie v esp_timer callbacku. DMA/backend a fyzicke
+  casovanie este treba overit na doske. WiFi/BT nespustat, vysielanie a QSO su EXPERIMENTALNE.
 - Realna funkcnost AX.25 QSO a AutoBIN s povodnym GP 1.61 nie je zatial overena.
 - Pri zapnuti PTT=LOW (radio neprinuti vysielat); TX sa aktivuje AZ cez USB :ARM.
   Po 5 minutach sa TX zase zakaze. Vypnutie: :DISARM.
@@ -22,13 +22,15 @@ UPOZORNENIE K TESTOVANIU
 
 1. INSTALACIA ARDUINO IDE
 ------------------------
-Testovacie odporucane kombinacie (V TENTO OKAMIH NIE SU OVERENE SKUTOCNOU
-KOMPILACIOU S REALNYM ARDUINO TOOLCHAINOM):
+Kompilacia bola overena s Arduino CLI, ESP32 core 3.3.12 a kniznicami nizsie;
+fyzicky test na ESP32 a radiu este nie je vykonany:
   Boards Manager: esp32 by Espressif Systems 3.3.12
   Library Manager: Adafruit GFX Library 1.12.6
                    Adafruit ILI9341 1.6.4
                    Adafruit BusIO 1.17.4
-  Vstavane s ESP32 core: SPI, SD, FS, Preferences, esp_timer, FreeRTOS.
+  Vstavane s ESP32 core: SPI, SD, FS, Preferences, I2S legacy driver, FreeRTOS.
+  Kompilator moze vypisat upozornenia o zastarani legacy I2S API; pouziva sa
+  kvoli internemu ADC/DAC povodneho ESP32.
   PS/2: vlastny dekoder v .ino, EXTERNA KNIŽNICA PS/2 NIE JE POTREBNA.
 Nastavenie Board: ESP32 Dev Module, Flash Frequency 80 MHz,
   Upload Speed 115200 (pocas prvych testov), Flash Mode DIO,
@@ -125,7 +127,7 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
   Allamat 296 (27 MHz CB, FM/AM verzia) nie je bezne SSB HF radio;
   300 Bd preto neskusaj automaticky s protistanicou na HF SSB.
   Frekvenciu a vysielanie pouzivaj len ak to miestne predpisy dovoluju.
-  AFSK vzorkovanie nominalne 9600 Hz (timer 104us ~9615Hz); DAC 8-bit; ADC1 12-bit.
+  AFSK vzorkovanie nominalne 9600 Hz cez I2S ADC/DAC DMA; DAC 8-bit; ADC1 12-bit.
 
 7. OVLADANIE A TESTY
 --------------------
