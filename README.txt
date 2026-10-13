@@ -35,7 +35,10 @@ fyzicky test na ESP32 a radiu este nie je vykonany:
 Nastavenie Board: ESP32 Dev Module, Flash Frequency 80 MHz,
   Upload Speed 115200 (pocas prvych testov), Flash Mode DIO,
   Partition Scheme: Default (zvysit ak bude potrebne).
-Otvor GP161_ESP32_v34/GP161_ESP32_v34.ino, vsetky .h zostanu v rovnakom priecinku.
+Vsetky subory GP161_ESP32_v34.ino a GP161_*.h su v koreni projektu.
+V Arduino IDE ich umiestni spolu do priecinka GP161_ESP32_v34/ a otvor
+GP161_ESP32_v34/GP161_ESP32_v34.ino. Nekopiruj dalsie stare .h do podpriecinka;
+Arduino musi pouzit jednu zhodnu sadu zdrojov vedla .ino.
 
 2. PINY ESP32-WROOM-32 (30 PIN)
 --------------------------------
@@ -240,7 +243,8 @@ Pozn.: PDF GP161_ESP32_v3_4_Pouzivatelsky_manual_SK.pdf v ZIP (21 stran).
 14. POSTUP OTVORENIA PROJEKTU
 ---------------------------
 1. Rozbal cely ZIP.
-2. Otvor GP161_ESP32_v34/GP161_ESP32_v34.ino v Arduino IDE.
+2. Umiestni vsetky subory GP161_*.h a GP161_ESP32_v34.ino vedla seba
+   v priecinku GP161_ESP32_v34 a otvor GP161_ESP32_v34.ino.
 3. Zvol ESP32 Dev Module a nainstaluj kniznice z bodu 1.
 4. Spusti Verify a pri chybe posli cely vystup kompilacie.
 5. Po uspesnom nahrati testuj najprv bez pripojeneho radia.

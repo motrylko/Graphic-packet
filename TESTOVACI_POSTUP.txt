@@ -3,7 +3,8 @@ GP161-ESP32 v3.1 - TESTOVACI POSTUP (Allamat 296, AUDIO AFSK)
 Poznamka: PTT radio testovat iba s antenou / umelou zatazou a s overenym
 zapojenim konektora. Vysielanie musi byt v sulade s predpismi pasma.
 
-[ ] 01. Otvorit GP161_ESP32_v34/GP161_ESP32_v34.ino; vsetky .h musia ostat vedla neho.
+[ ] 01. Umiestnit vsetky GP161_*.h a GP161_ESP32_v34.ino vedla seba
+         v priecinku GP161_ESP32_v34; otvorit tento .ino.
 [ ] 02. Nainstalovat esp32 core, Adafruit GFX, Adafruit ILI9341 a BusIO podla README.
 [ ] 03. Arduino IDE -> ESP32 Dev Module -> Verify/Overit (vysledok zaznamenat).
 [ ] 04. Odpojit radio. Nahrat na ESP32, 115200 Serial Monitor.
