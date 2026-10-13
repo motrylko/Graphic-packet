@@ -163,7 +163,7 @@ inline void begin(){
   dacWrite(TX,128);
   currentSpeed=requestedBaud;
   demod.setSpeed(currentSpeed);mod.setSpeed(currentSpeed);
-  analogSetPinAttenuation(RX,ADC_11db);
+  // Keep Arduino's ADC driver-ng uninitialized; legacy I2S ADC owns ADC1 here.
 
   i2s_config_t config={};
   config.mode=static_cast<i2s_mode_t>(I2S_MODE_MASTER|I2S_MODE_RX|I2S_MODE_TX|
