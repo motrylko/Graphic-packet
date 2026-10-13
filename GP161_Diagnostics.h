@@ -1,5 +1,5 @@
 #pragma once
-// GP161-ESP32 v3.1 diagnostics: internal AFSK RX, TX locked by default.
+// GP161-ESP32 v3.1 diagnostics: internal AFSK RX/TX.
 // Arduino code; doesn't modify the user's files except controlled test paths.
 
 static constexpr uint8_t DIAG_N=8;
@@ -156,7 +156,7 @@ inline void runOfflineDiagnostics(bool verbose){
  diagSave(3,testNvsStore()?1:2,"NVS isolated namespace / readback");
  diagSave(4,3,"Keyboard requires physical F1-F5 and Alt+M");
  diagSave(5,3,"Inspect color bars, text and layout visually");
- diagSave(6,3,"Internal AFSK 1200/300, :AUDIOSTATUS then :ARM");
+ diagSave(6,3,"Internal AFSK 1200/300, TX ready; :AUDIOSTATUS");
  if(verbose)printReport(Serial);
 }
 inline void drawDiagnostics(){
@@ -212,7 +212,7 @@ inline void processDiagnosticSelection(uint8_t selection){
   case 3:diagSave(3,testNvsStore()?1:2,"NVS read/write/remove isolated key");break;
   case 4:diagSave(4,3,"Manual PS2 scan check");page=Page::KeyboardTest;break;
   case 5:diagSave(5,3,"Manual TFT color/geometry check");testScreenStage=0;page=Page::TftTest;break;
-  case 6:diagSave(6,3,"Use :AUDIOSTATUS then verified :ARM");page=Page::Port;break;
+  case 6:diagSave(6,3,"Use :AUDIOSTATUS to inspect audio");page=Page::Port;break;
   case 7:{bool ok=exportReport();diagSave(7,ok?1:2,ok?"Appended to /GP/LOGS/TEST_V3.TXT":"USB only; SD log unavailable");break;}
  }
  paint();

@@ -17,7 +17,7 @@ zapojenim konektora. Vysielanie musi byt v sulade s predpismi pasma.
 [ ] 10. SETUP: Packet baud, Enter 1200 -> 300, restart ESP32 -> ulozene v NVS.
 [ ] 11. :TESTALL – protokolovy test, SD/NVS (len ak prislusne zariadenia su zapojene).
 [ ] 12. Bez radia: na GPIO34 overit DC predpatie cca 1.65 V cez 10k+10k.
-[ ] 13. PTT vypnute po starte. Overit Q1 BC547 mimo radia cez :ARM a :PTTTEST (150 ms).
+[ ] 13. PTT vypnute po starte. Overit Q1 BC547 mimo radia cez :PTTTEST (150 ms).
 [ ] 14. Osciloskopom overit DAC audio GPIO25; radio nechaj odpojene.
 [ ] 15. Overit ALLAMAT MIC GND/RX/PTT/MIC skutocnou schemou a meranim.
 [ ] 16. Overit RX audio zdroj – NIE pin RX z mikrofonoveho konektora.
@@ -27,7 +27,7 @@ zapojenim konektora. Vysielanie musi byt v sulade s predpismi pasma.
 [ ] 20. Druha stanica ma prijat dobry AX.25 frame so spravnym FCS.
 [ ] 21. Skusit spojenie na QSO F1, potom ostatne F2-F5; potom AutoBIN na SD.
 [ ] 22. 300Bd: testovat najskor umelymi audio signalmi, na SSB stanici podla normy.
-[ ] 23. :DISARM, skontrolovat, ze PTT zostava LOW po restarte.
+[ ] 23. Po ukonceni testu skontrolovat, ze PTT zostava LOW.
 
 Ak kompilacia neprejde, uloz cely vypis Arduino IDE a presnu verziu
 ESP32 core / Arduino IDE. Ak RF dekodovanie zlyhava, poznamenaj ADC hodnoty,

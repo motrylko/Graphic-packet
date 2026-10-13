@@ -12,7 +12,7 @@ static constexpr size_t AX_PACLEN=128;
 // AutoBIN CRC is NOT the AX.25 frame CRC! CCITT x^16+x^12+x^5+1,
 // start 0, MSB-first, non-augmented format described by OpenBCM / DC4OX.
 
-inline bool radioAvailable(){return radioArmed();}
+inline bool radioAvailable(){return RADIO_CONFIGURED;}
 inline void mhUpdate(const char *call){
   for(uint8_t i=0;i<heardUsed;i++)if(strcmp(heard[i].call,call)==0){
     heard[i].lastMs=millis();heard[i].frames++;return;
@@ -35,7 +35,7 @@ inline bool sendPacket(const char *destination,uint8_t control,bool pid,const ui
     flashMessage("Set licensed MYCALL first");return false;
   }
   gp::Frame f;if(!gp::build(f,destination,mycall,control,pid,bytes,len))return false;
-  if(!radioAvailable()){flashMessage("RF OFF: enable only after wiring check");return false;}
+  if(!radioAvailable()){flashMessage("RF backend unavailable");return false;}
   if(!queueFrame(f)){flashMessage("TX queue full");return false;}
   return true;
 }
@@ -45,7 +45,7 @@ inline void sendSuper(uint8_t ch,uint8_t control){
 }
 inline void connectChannel(uint8_t ch,const char *peer){
   if(ch>=5||!gp::callsignValid(peer)){flashMessage("Invalid callsign");return;}
-  if(!radioAvailable()){flashMessage("RF disabled: no connection");return;}
+  if(!radioAvailable()){flashMessage("RF backend unavailable");return;}
   Session &q=sessions[ch];if(q.state){flashMessage("Channel is busy");return;}
   snprintf(q.peer,sizeof(q.peer),"%s",peer);
   for(char *p=q.peer;*p;p++)*p=(char)toupper((unsigned char)*p);
@@ -359,28 +359,20 @@ inline void serialDiagnostics(){
       } else if(strcmp(buf,":REPORT")==0){
         processDiagnosticSelection(7);paint();
       } else if(strcmp(buf,":BAYSTATUS")==0 || strcmp(buf,":AUDIOSTATUS")==0){
-        Serial.printf("AUDIO AFSK backend=%s baud=%u armed=%u rxTransitions=%lu rxOverflow=%lu good=%lu badFCS=%lu ADC=%d TX=%lu\n",
+        Serial.printf("AUDIO AFSK backend=%s baud=%u txReady=%u rxTransitions=%lu rxOverflow=%lu good=%lu badFCS=%lu ADC=%d TX=%lu\n",
             "AFSK AUDIO",(unsigned)packetBaud,
-            (unsigned)radioArmed(),(unsigned long)bay::edges(),(unsigned long)bay::overflow(),
+            (unsigned)radioAvailable(),(unsigned long)bay::edges(),(unsigned long)bay::overflow(),
             (unsigned long)decoder.good,(unsigned long)decoder.badFcs,bay::auxInput(),(unsigned long)txFrames);
         page=Page::Port;paint();
-      } else if(strcmp(buf,":ARM")==0){
-        if(!RADIO_CONFIGURED)Serial.println("DENIED: audio backend not configured");
-        else{radioArmedUntil=millis()+300000UL;Serial.println("TX ARMED for 5 minutes: analog/PTT adapter MUST be verified");page=Page::Port;paint();}
-      } else if(strcmp(buf,":DISARM")==0){
-        radioArmedUntil=0;bay::emergencyStop();txUsed=0;txHead=txTail=0;
-        Serial.println("TX DISARMED, PTT off, queue cleared");page=Page::Port;paint();
       } else if(strcmp(buf,":PTTTEST")==0){
-        if(!radioArmed()){Serial.println("PTT BLOCKED - :ARM required");}
-        else Serial.println(bay::pttPulse(150)?"PTT 150 ms pulse complete":"PTT busy / rejected");
+        Serial.println(bay::pttPulse(150)?"PTT 150 ms pulse complete":"PTT busy / rejected");
         page=Page::Port;paint();
       } else if(strcmp(buf,":BEACONTEST")==0){
-        if(!radioArmed())Serial.println("BEACON BLOCKED - :ARM required");
-        else Serial.println(sendPacket("CQ",0x03,true,(const uint8_t*)"GP161 V31 AUDIO TEST",20)?
+        Serial.println(sendPacket("CQ",0x03,true,(const uint8_t*)"GP161 V31 AUDIO TEST",20)?
             "Beacon queued (NOT proof of RF success)":"Beacon rejected (set MYCALL/queue check)");
       } else if(strcmp(buf,":HELP")==0){
         Serial.println("GP161 v3.1: :TESTALL :SDTEST :FILETEST :REPORT :DEMO :QSO5 :CLEARQSO5");
-        Serial.println(":AUDIOSTATUS :ARM :DISARM :PTTTEST :BEACONTEST :HELP");
+        Serial.println(":AUDIOSTATUS :PTTTEST :BEACONTEST :HELP");
         Serial.println("PS/2: Alt+M menu, then 9 DIAGNOSTICS; test 1..8; ESC monitor.");
       } else if(strcmp(buf,":QSO5")==0){
         if(RADIO_CONFIGURED) Serial.println("QSO5 DEMO denied: RF backend active");

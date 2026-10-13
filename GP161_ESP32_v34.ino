@@ -6,7 +6,7 @@
   EXPERIMENTAL v3.4: not a verified complete replica of original GP1.61.
   AX.25 codec and audio waveform DSP tested on desktop. Real ADC/DAC timing,
   connected-mode, AutoBIN interoperability and RF need physical validation.
-  Software AFSK receive active; transmitting requires USB :ARM for five minutes.
+  Software AFSK receive active; TX is available after startup.
   DO NOT CONNECT RADIO AUDIO OR PTT DIRECTLY WITHOUT ANALOG LEVEL ADAPTER!
   Check README.txt for electrical pinout and library versions.
 */
@@ -27,11 +27,6 @@
 #define GP_ENABLE_KISS_UART2 0
 #include "GP161_AudioHW.h"
 constexpr bool RADIO_CONFIGURED=true;
-// Arm is required separately (USB :ARM) and expires after five minutes.
-// Compile-time backend enable alone NEVER permits on-air TX.
-uint32_t radioArmedUntil=0;
-inline bool radioArmed(){ return RADIO_CONFIGURED && radioArmedUntil &&
-  (int32_t)(radioArmedUntil-millis())>0; }
 
 // ------------- fixed GPIO pinout (ESP32-WROOM 30-pin) -----------------
 constexpr int PIN_TFT_SCK   = 18;
@@ -512,7 +507,7 @@ void drawSetup() {
 void drawPort() {
   tft.fillScreen(C_BLUE); header(); titleBox("PORT / MODEM STATUS");
   txt(6,61,"MODEM: INTERNAL AFSK 1200/300",C_YELLOW);
-  txt(6,77,radioArmed()?"TX ARMED (5min max)":RADIO_CONFIGURED?"RX ONLY (TX LOCKED)":"RADIO: DISABLED (SAFE)",C_WHITE);
+  txt(6,77,RADIO_CONFIGURED?"TX READY":"RADIO: DISABLED",C_WHITE);
   txt(6,94,"AUDIO IN : GPIO34 (ADC1)",C_WHITE);
   txt(6,106,"AUDIO OUT: GPIO25 (DAC)",C_WHITE);
   txt(6,118,"PTT       GPIO27 -> BC547",C_WHITE);
@@ -521,8 +516,8 @@ void drawPort() {
   char rfline[64];snprintf(rfline,sizeof(rfline),"Edges:%lu Loss:%lu ADC:%d",(unsigned long)bay::edges(),
      (unsigned long)bay::overflow(),bay::auxInput());
   txt(6,155,rfline,C_YELLOW);
-  status(radioArmed()?"TX ARMED - USB :DISARM":"TX LOCKED - :ARM after audio/PTT check");
-  prompt("USB :AUDIOSTATUS :ARM :PTTTEST"); footer();
+  status(RADIO_CONFIGURED?"TX READY":"RADIO DISABLED");
+  prompt("USB :AUDIOSTATUS :PTTTEST"); footer();
 }
 
 void drawMHeard() {
@@ -546,7 +541,7 @@ void drawAbout() {
   txt(7,114,"SD: SPI shared",C_WHITE);
   txt(7,133,"AX.25 codec / AutoBIN experimental",C_YELLOW);
   txt(7,145,"Not a proven GP 1.61 replica",C_YELLOW);
-  status("AFSK RX active, TX locked by default");prompt("Esc:MON");footer();
+  status("AFSK RX active, TX READY");prompt("Esc:MON");footer();
 }
 
 void paint() {
@@ -994,7 +989,7 @@ void setup() {
   memset(monitorLines,0,sizeof(monitorLines));
   monitorUsed=0;
   addBootMonitor("SYS> GP 1.61 ESP32 v3.4 CLASSIC UI TEST");
-  addBootMonitor("SYS> Internal AFSK RX 1200/300; TX locked");
+  addBootMonitor("SYS> Internal AFSK RX 1200/300; TX ready");
   addBootMonitor("SYS> AX25/HDLC CRC core ready");
   bay::setBaud(packetBaud);
   bay::begin();
@@ -1006,18 +1001,13 @@ void setup() {
   pinMode(PIN_PS2_CLOCK,INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(PIN_PS2_CLOCK),ps2ISR,FALLING);
   Serial.println("GP161 v3.4: F1-F5 QSO; Alt+M Menu; ESC Monitor");
-  Serial.println("USB: :TESTALL :SDTEST :FILETEST :AUDIOSTATUS :ARM :DISARM :PTTTEST :BEACONTEST :HELP");
+  Serial.println("USB: :TESTALL :SDTEST :FILETEST :AUDIOSTATUS :PTTTEST :BEACONTEST :HELP");
 }
 
 void loop() {
   uint8_t b;
   uint8_t maxProcess=24;
   while(maxProcess-- && pullScan(b))handleScan(b);
-  if(radioArmedUntil && (int32_t)(millis()-radioArmedUntil)>=0){
-    radioArmedUntil=0;bay::emergencyStop();txUsed=0;txHead=txTail=0;
-    addMonitor("SYS> Safety timeout: TX disarmed");Serial.println("RF DISARMED (timeout)");
-    if(page==Page::Port)paint();
-  }
   if(bootMonitorExpires && (int32_t)(millis()-bootMonitorExpires)>=0){
     bootMonitorExpires=0;
     clearBootMonitor();

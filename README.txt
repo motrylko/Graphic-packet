@@ -16,8 +16,9 @@ UPOZORNENIE K TESTOVANIU
   v blokovacej ulohe FreeRTOS, nie v esp_timer callbacku. DMA/backend a fyzicke
   casovanie este treba overit na doske. WiFi/BT nespustat, vysielanie a QSO su EXPERIMENTALNE.
 - Realna funkcnost AX.25 QSO a AutoBIN s povodnym GP 1.61 nie je zatial overena.
-- Pri zapnuti PTT=LOW (radio neprinuti vysielat); TX sa aktivuje AZ cez USB :ARM.
-  Po 5 minutach sa TX zase zakaze. Vypnutie: :DISARM.
+- Pri zapnuti PTT=LOW (radio neprinuti vysielat); TX je dostupne po starte.
+- PTT sa pri necinnej prevadzke drzi LOW; pred testom alebo vysielanim over zapojenie,
+  zataz/antenu a miestne predpisy.
 - Pocitaj s dalsimi iteraciami oprav po fyzickych meraniach na osciloskope.
 
 1. INSTALACIA ARDUINO IDE
@@ -118,8 +119,8 @@ Nepripajaj +12 V vodic mikrofonu ani ine radio napajanie na GPIO.
 RX prepínaci vodic mikrofonu NIE JE sucastou noveho PTT obvodu.
 
 Prvy test: bez pripojeneho radia, multimetrom skontroluj Q1:
-  po zapnuti a :DISARM nesmie viest kolektor-emitor;
-  :ARM a :PTTTEST => na ~150 ms sa uzemni kolektor Q1.
+  po zapnuti nesmie viest kolektor-emitor;
+  :PTTTEST => na ~150 ms sa uzemni kolektor Q1.
 Az po potvrdeni napeti a polarity pripoj Allamat 296.
 Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
 
@@ -143,10 +144,8 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
   Po pripojeni USB Serial Monitor pri 115200: Newline / Both NL & CR.
   :TESTALL       softverove kontroly AX.25 a microSD
   :AUDIOSTATUS   RX symboly, CRC chyby, ADC uroven, rychlost
-  :ARM           TX povoleny na max 5 minut (len s overenym PTT obvodom)
   :PTTTEST       kratke zopnutie BC547 PTT na 150ms
   :BEACONTEST    poslat testovaci AX.25 UI ramec cez AFSK
-  :DISARM        okamzite zakazat dalsie TX / vypnut PTT
   :REPORT        zapisat diagnostiku na SD
   :HELP          zobrazit napovedu
   Pred TX MUSI byt radio pripojene k spravne dimenzovanej antene/zatazi!
