@@ -74,7 +74,8 @@ inline void sendUserLine(uint8_t ch,const char *line){
   size_t n=strlen(line);if(n+1>AX_PACLEN){flashMessage("Line too long");return;}
   uint8_t data[AX_PACLEN];memcpy(data,line,n);data[n]='\r';
   if(sendInfo(ch,data,n+1)){
-    char row[51];snprintf(row,sizeof(row),"> %.46s",line);addHistory(ch,row);paint();
+    char row[51];snprintf(row,sizeof(row),"> %.46s",line);addHistory(ch,row);
+    snprintf(row,sizeof(row),"TX > %.46s",line);addMonitor(row);paint();
   }else flashMessage("Waiting for AX.25 ACK");
 }
 inline void handleQsoEnter(uint8_t ch){

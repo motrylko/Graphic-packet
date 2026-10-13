@@ -8,7 +8,8 @@ zapojenim konektora. Vysielanie musi byt v sulade s predpismi pasma.
 [ ] 02. Nainstalovat esp32 core, Adafruit GFX, Adafruit ILI9341 a BusIO podla README.
 [ ] 03. Arduino IDE -> ESP32 Dev Module -> Verify/Overit (vysledok zaznamenat).
 [ ] 04. Odpojit radio. Nahrat na ESP32, 115200 Serial Monitor.
-[ ] 05. Pri starte logo OM8AWA 3 sekundy, potom MONITOR.
+[ ] 05. Po logu sa systemove hlasky v MONITORI po 3 sekundach vymazu;
+         zostanu iba RX ramce a text odoslany z klavesnice.
 [ ] 06. Bez radia nechaj RX-only aspon 30 minut; nesmie nastat reset.
 [ ] 07. :AUDIOSTATUS musi hlasit I2S DMA READY; skontroluj rxOverflow.
 [ ] 08. F1-F5, Alt+M, Esc, Alt+U spravne prepina obrazovky.

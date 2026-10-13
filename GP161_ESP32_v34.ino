@@ -105,6 +105,8 @@ bool viewerTruncated = false;
 constexpr uint8_t MONITOR_CAP = 36;
 char monitorLines[MONITOR_CAP][DISPLAY_COLS+1] = {};
 uint8_t monitorUsed = 0;
+uint8_t bootMonitorCount = 0;
+uint32_t bootMonitorExpires = 0;
 char popMessage[64] = "";
 unsigned long popExpires = 0;
 
@@ -197,14 +199,44 @@ void ellipsize(const char *str, char *out, size_t cap, size_t maxChars) {
 }
 
 void addMonitor(const char *message) {
+  const bool displayMessage = strncmp(message,"RX ",3)==0 ||
+                              strncmp(message,"TX ",3)==0;
+  if (!displayMessage) {
+    gpLogMonitor(message);
+    return;
+  }
   if (monitorUsed >= MONITOR_CAP) {
     memmove(monitorLines[0], monitorLines[1],
             (MONITOR_CAP-1)*sizeof(monitorLines[0]));
     monitorUsed = MONITOR_CAP-1;
+    if (bootMonitorCount) --bootMonitorCount;
   }
   snprintf(monitorLines[monitorUsed],sizeof(monitorLines[0]),"%s",message);
   ++monitorUsed;
   gpLogMonitor(message);
+}
+
+void addBootMonitor(const char *message) {
+  if (monitorUsed < MONITOR_CAP) {
+    snprintf(monitorLines[monitorUsed],sizeof(monitorLines[0]),"%s",message);
+    ++monitorUsed;
+    ++bootMonitorCount;
+  }
+  gpLogMonitor(message);
+}
+
+void clearBootMonitor() {
+  if (bootMonitorCount >= monitorUsed) {
+    memset(monitorLines,0,sizeof(monitorLines));
+    monitorUsed=0;
+  } else {
+    memmove(monitorLines[0],monitorLines[bootMonitorCount],
+            (monitorUsed-bootMonitorCount)*sizeof(monitorLines[0]));
+    monitorUsed-=bootMonitorCount;
+    memset(monitorLines[monitorUsed],0,
+           bootMonitorCount*sizeof(monitorLines[0]));
+  }
+  bootMonitorCount=0;
 }
 
 void flashMessage(const char *message) {
@@ -959,14 +991,14 @@ void setup() {
   loadPrefs();
   initSD();
   if(sdReady && restoreHistoryEnabled)gpRestoreHistory();
-  addMonitor("SYS> GP 1.61 ESP32 v3.4 CLASSIC UI TEST");
-  addMonitor("SYS> Internal AFSK RX 1200/300; TX locked");
-  addMonitor("SYS> AX25/HDLC CRC core ready");
-  bay::setBaud(packetBaud);
-  bay::begin();
-  // Keep boot/status entries in the SD log, but start the live display empty.
   memset(monitorLines,0,sizeof(monitorLines));
   monitorUsed=0;
+  addBootMonitor("SYS> GP 1.61 ESP32 v3.4 CLASSIC UI TEST");
+  addBootMonitor("SYS> Internal AFSK RX 1200/300; TX locked");
+  addBootMonitor("SYS> AX25/HDLC CRC core ready");
+  bay::setBaud(packetBaud);
+  bay::begin();
+  bootMonitorExpires=millis()+3000;
   page=Page::Monitor;paint();
 
   // PS/2: use a TRUE bidirectional open-drain compatible level shifter.
@@ -985,6 +1017,11 @@ void loop() {
     radioArmedUntil=0;bay::emergencyStop();txUsed=0;txHead=txTail=0;
     addMonitor("SYS> Safety timeout: TX disarmed");Serial.println("RF DISARMED (timeout)");
     if(page==Page::Port)paint();
+  }
+  if(bootMonitorExpires && (int32_t)(millis()-bootMonitorExpires)>=0){
+    bootMonitorExpires=0;
+    clearBootMonitor();
+    if(page==Page::Monitor)paint();
   }
   radioTick();serialKissTick();serialDiagnostics();connectionTick();transferTick();
   if(beaconIntervalMin && (int32_t)(millis()-beaconNext)>=0){

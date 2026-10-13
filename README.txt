@@ -134,7 +134,9 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
 
 7. OVLADANIE A TESTY
 --------------------
-  Po zapnuti: logo OM8AWA 3 sekundy, potom MONITOR.
+  Po zapnuti: logo OM8AWA 3 sekundy, potom kratke systemove hlasky
+  v MONITORI, ktore po dalsich 3 sekundach zmiznu. Zivy MONITOR zobrazuje
+  iba prijate RX ramce a text odoslany z klavesnice v QSO.
   F1-F5: QSO okna, Esc: MONITOR, Alt+M: MENU, Alt+U: SETUP.
   SETUP -> Packet baud -> Enter: prepina 1200/300; uklada do NVS.
   MHeard, subory microSD, AutoBIN TX/RX, editor, beacon, diagnostika.
@@ -176,12 +178,14 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
 
 12. AUTOMATICKE UKLADANIE HISTORIE - PREVZATE Z v3.2
 ------------------------------------------------
-- SD:/GP/LOGS/MONITOR.LOG - Monitor RX/TX/SYS spravy.
+- SD:/GP/LOGS/MONITOR.LOG - Monitor RX/TX/SYS/ERR udalosti.
 - SD:/GP/LOGS/CH1.LOG az CH5.LOG - komunikacia a stavove hlasenia
   piatich nezavislych QSO kanalov.
 - Novy riadok sa ihned prida do textoveho suboru na microSD, flush, close.
 - Po starte program precita posledne zaznamy (max. 8 KiB kazdeho LOG).
-  Zive okno MONITOR sa po starte zamerne vymaze; historia zostava na SD.
+Zive okno MONITOR sa po starte zamerne vymaze; systemove hlasky su
+zobrazene iba 3 sekundy. Potom sa zobrazuju iba RX a TX riadky.
+Systemove a chybove zaznamy zostavaju ulozene na SD.
   QSO okna obnovia poslednych 10 riadkov kazdeho kanala.
 - Spojenia AX.25, stav protistanice, nedokoncene prenosy ani buffer TX
   sa po restarte NEOBNOVUJU; QSO kanal sa zobrazi ako FREE.
