@@ -150,25 +150,14 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
   Pred TX MUSI byt radio pripojene k spravne dimenzovanej antene/zatazi!
   Poznamka: AutoBIN, viac QSO a decode pri slabom signale stale vyzaduju testy.
 
-8. NÁHĽADY (JPG)
-----------------
-  Priecinok Nahlady: OM8AWA logo, monitor, QSO, SETUP, File Manager,
-  MHEARD, AutoBIN a modem status (niektore ilustracie su z GP v3.0
-  a mozu obsahovat starsie nazvy SER12/BayCom; nie firmware screenshoty).
-  '03_alt_m_klasicke_320x240.png' je SCHVALENE hlavne menu Alt+M.
-  '04_setup_klasicky_1_320x240.png' a '04_setup_klasicky_2_320x240.png'
-  su schvalene strany SETUP; tieto obrazovky su priamo kreslene vo v3.4.
-  '12_ptt_bc547_zapojenie.jpg' je nova jednutranzistorova PTT schema.
-  '13_ptt_test_320x240.jpg' je navrh diagnostickej obrazovky PTT.
-
-9. TESTY DOSTUPNE V ZIP
------------------------
-  Testy/test_protocol.cpp       test AX.25 NRZI/HDLC/CRC
-  Testy/test_audio_dsp.cpp      cisty audio digitalny loopback
-  Testy/test_audio_regression.cpp 144 syntetickych modulovanych paketov
-  Testy/VYSLEDKY_TESTOV.txt    konkretne vysledky a obmedzenia
-  Kompilacia realnym Arduino IDE/Core 3.3.12 zostava NEOVERENA.
-  Fyzicke radio testy, BER, osciloskop, osadenie a meranie GPIO: NEOVERENE.
+8. NAHLADY A TESTY
+------------------
+  Obrazky navrhovanych obrazoviek, schemy v priecinku Nahlady a zdrojove
+  hostitelske testy v priecinku Testy nie su sucastou aktualneho GitHub stromu.
+  Logo pouzite pri starte je obsiahnute v GP161_OM8AWA_Logo.h.
+  Kompilacia celeho sketchu bola overena cez Arduino CLI s ESP32 core 3.3.12
+  a kniznicami uvedenymi vyssie. To nepotvrdzuje spravnu funkciu hardveru.
+  Fyzicke radio testy, BER, osciloskop a meranie GPIO este NEPREBEHLI.
 
 10. LICENCIA
 -----------
@@ -181,8 +170,8 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
 - Nahradena predosla dokumentacia SPDT rele schémou 1x BC547.
 - PTT pin ostava GPIO27 aktivny HIGH; GPIO26 je volny.
 - V kode sa latch GPIO27 nastavi LOW pred pinMode(OUTPUT).
-- Pridany hostitelsky test startu a PTT pulzu (bez skutocneho radia).
-- Neprebehla kompilacia skutocnym Arduino toolchainom ani RF test.
+- Kompilacia Arduino sketchu presla s ESP32 core 3.3.12.
+- PTT, audio a RF spravanie na skutocnom hardveri este nebolo overene.
 
 
 12. AUTOMATICKE UKLADANIE HISTORIE - PREVZATE Z v3.2
@@ -191,8 +180,9 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
 - SD:/GP/LOGS/CH1.LOG az CH5.LOG - komunikacia a stavove hlasenia
   piatich nezavislych QSO kanalov.
 - Novy riadok sa ihned prida do textoveho suboru na microSD, flush, close.
-- Po starte program precita posledne zaznamy (max. 8 KiB kazdeho LOG)
-  a obnovi poslednych 36 riadkov monitoru a 10 na kazdy QSO kanal.
+- Po starte program precita posledne zaznamy (max. 8 KiB kazdeho LOG).
+  Zive okno MONITOR sa po starte zamerne vymaze; historia zostava na SD.
+  QSO okna obnovia poslednych 10 riadkov kazdeho kanala.
 - Spojenia AX.25, stav protistanice, nedokoncene prenosy ani buffer TX
   sa po restarte NEOBNOVUJU; QSO kanal sa zobrazi ako FREE.
 - Logy neobsahuju realny datum ani hodinu, pretoze ESP32 nema RTC/NTP
@@ -234,22 +224,20 @@ Pozn.: PDF GP161_ESP32_v3_4_Pouzivatelsky_manual_SK.pdf v ZIP (21 stran).
   z fyzickeho TFT. Pribuzna geometria a farby su v .ino; drobne detaily
   ikon/fontov sa mozu lisit.
 - Aktualny manual ma verziu 3.4, opisuje aj automaticke SD logy.
-- Overene na PC: C++ syntax s TESTOVACIMI nahradami Arduino kniznic,
-  216 protokolovych AX.25 pripadov, 184 AFSK pripadov, test SD historie
-  a boot loga/PTT v simulacii. Nie je to realna kompilacia ESP32.
-- Realna kompilacia pre ESP32, meranie AFSK casovania a Allamat 296
+- Kompilacia realnym Arduino toolchainom presla s Arduino CLI a ESP32 core
+  3.3.12, s kniznicami uvedenymi v bode 1.
+- Meranie AFSK casovania, RF/BER testy a overenie s Allamat 296
   este neprebehli; firmware zostava EXPERIMENTALNY.
 
 14. POSTUP OTVORENIA PROJEKTU
 ---------------------------
-1. Rozbal cely ZIP.
-2. Umiestni vsetky subory GP161_*.h a GP161_ESP32_v34.ino vedla seba
-   v priecinku GP161_ESP32_v34 a otvor GP161_ESP32_v34.ino.
+1. Stiahni zdrojove subory z GitHub repozitara.
+2. Skopiruj GP161_ESP32_v34.ino a vsetky GP161_*.h z korena repozitara
+   vedla seba do priecinka GP161_ESP32_v34 a otvor tento .ino subor.
 3. Zvol ESP32 Dev Module a nainstaluj kniznice z bodu 1.
 4. Spusti Verify a pri chybe posli cely vystup kompilacie.
 5. Po uspesnom nahrati testuj najprv bez pripojeneho radia.
 6. Pri testovani Allamat 296 pouzi analogove obvody a PTT ochranu
    uvedene v bodoch 3-5; GPIO nikdy nenapajaj z radio 12 V.
 
-Dokumentacia/Dokumentacia_v3_4.pdf: PDF je v korenovom priecinku ZIP
-pod povodnym nazvom GP161_ESP32_v3_4_Pouzivatelsky_manual_SK.pdf.
+PDF manual ani priecinky Nahlady/Testy nie su sucastou aktualneho GitHub stromu.
