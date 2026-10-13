@@ -12,7 +12,7 @@ static constexpr size_t AX_PACLEN=128;
 // AutoBIN CRC is NOT the AX.25 frame CRC! CCITT x^16+x^12+x^5+1,
 // start 0, MSB-first, non-augmented format described by OpenBCM / DC4OX.
 
-inline bool radioAvailable(){return RADIO_CONFIGURED;}
+inline bool radioAvailable(){return RADIO_CONFIGURED && bay::available();}
 inline void mhUpdate(const char *call){
   for(uint8_t i=0;i<heardUsed;i++)if(strcmp(heard[i].call,call)==0){
     heard[i].lastMs=millis();heard[i].frames++;return;

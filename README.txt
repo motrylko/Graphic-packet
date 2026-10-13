@@ -131,7 +131,7 @@ Zjednodusena schema je v Nahlady/12_ptt_bc547_zapojenie.jpg.
   Allamat 296 (27 MHz CB, FM/AM verzia) nie je bezne SSB HF radio;
   300 Bd preto neskusaj automaticky s protistanicou na HF SSB.
   Frekvenciu a vysielanie pouzivaj len ak to miestne predpisy dovoluju.
-  AFSK vzorkovanie nominalne 9600 Hz cez I2S ADC/DAC DMA; DAC 8-bit; ADC1 12-bit.
+  AFSK vzorkovanie nominalne 24000 Hz cez I2S ADC/DAC DMA; DAC 8-bit; ADC1 12-bit.
 
 7. OVLADANIE A TESTY
 --------------------

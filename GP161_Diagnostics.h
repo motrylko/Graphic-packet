@@ -156,7 +156,7 @@ inline void runOfflineDiagnostics(bool verbose){
  diagSave(3,testNvsStore()?1:2,"NVS isolated namespace / readback");
  diagSave(4,3,"Keyboard requires physical F1-F5 and Alt+M");
  diagSave(5,3,"Inspect color bars, text and layout visually");
- diagSave(6,3,"Internal AFSK 1200/300, TX ready; :AUDIOSTATUS");
+ diagSave(6,3,"Internal AFSK 1200/300; check :AUDIOSTATUS");
  if(verbose)printReport(Serial);
 }
 inline void drawDiagnostics(){

@@ -507,7 +507,7 @@ void drawSetup() {
 void drawPort() {
   tft.fillScreen(C_BLUE); header(); titleBox("PORT / MODEM STATUS");
   txt(6,61,"MODEM: INTERNAL AFSK 1200/300",C_YELLOW);
-  txt(6,77,RADIO_CONFIGURED?"TX READY":"RADIO: DISABLED",C_WHITE);
+  txt(6,77,bay::available()?"TX READY":"AUDIO: NOT READY",C_WHITE);
   txt(6,94,"AUDIO IN : GPIO34 (ADC1)",C_WHITE);
   txt(6,106,"AUDIO OUT: GPIO25 (DAC)",C_WHITE);
   txt(6,118,"PTT       GPIO27 -> BC547",C_WHITE);
@@ -516,7 +516,7 @@ void drawPort() {
   char rfline[64];snprintf(rfline,sizeof(rfline),"Edges:%lu Loss:%lu ADC:%d",(unsigned long)bay::edges(),
      (unsigned long)bay::overflow(),bay::auxInput());
   txt(6,155,rfline,C_YELLOW);
-  status(RADIO_CONFIGURED?"TX READY":"RADIO DISABLED");
+  status(bay::available()?"TX READY":"AUDIO BACKEND UNAVAILABLE");
   prompt("USB :AUDIOSTATUS :PTTTEST"); footer();
 }
 
@@ -541,7 +541,7 @@ void drawAbout() {
   txt(7,114,"SD: SPI shared",C_WHITE);
   txt(7,133,"AX.25 codec / AutoBIN experimental",C_YELLOW);
   txt(7,145,"Not a proven GP 1.61 replica",C_YELLOW);
-  status("AFSK RX active, TX READY");prompt("Esc:MON");footer();
+  status(bay::available()?"AFSK RX active, TX READY":"AFSK AUDIO BACKEND UNAVAILABLE");prompt("Esc:MON");footer();
 }
 
 void paint() {
@@ -989,10 +989,11 @@ void setup() {
   memset(monitorLines,0,sizeof(monitorLines));
   monitorUsed=0;
   addBootMonitor("SYS> GP 1.61 ESP32 v3.4 CLASSIC UI TEST");
-  addBootMonitor("SYS> Internal AFSK RX 1200/300; TX ready");
   addBootMonitor("SYS> AX25/HDLC CRC core ready");
   bay::setBaud(packetBaud);
   bay::begin();
+  addBootMonitor(bay::available()?"SYS> Internal AFSK RX 1200/300; TX ready":
+                                  "SYS> AFSK audio backend unavailable");
   bootMonitorExpires=millis()+3000;
   page=Page::Monitor;paint();
 

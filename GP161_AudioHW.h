@@ -81,7 +81,7 @@ static void audioTask(void*) {
         txDraining=false;txDrainBlocks=0;
         mod.start(txPacked,txBitCount);
         digitalWrite(PTT,HIGH);
-        preDelay=192;
+        preDelay=480;
         wasTx=true;
       }
       portEXIT_CRITICAL(&mux);

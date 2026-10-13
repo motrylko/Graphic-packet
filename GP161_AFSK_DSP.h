@@ -1,12 +1,12 @@
 #pragma once
 // GP161 v3.1 - original experimental audio AFSK DSP (no Arduino dependency).
-// 9600 samples per second, phase-continuous 1200/2200 and 1600/1800 Hz.
+// 24000 samples per second, phase-continuous 1200/2200 and 1600/1800 Hz.
 // Software modem laboratory prototype. Real RF BER must be validated.
 #include <stdint.h>
 #include <stddef.h>
 #include <math.h>
 namespace audio_dsp {
-static constexpr uint32_t SAMPLE_RATE = 9600;
+static constexpr uint32_t SAMPLE_RATE = 24000;
 // Renamed from PI: Arduino.h defines PI as a macro, which breaks the declaration.
 static constexpr float GP_PI = 3.14159265358979323846f;
 struct Profile {
@@ -14,7 +14,7 @@ struct Profile {
   uint8_t samplesPerBit;
 };
 inline Profile profile(uint16_t baud){
-  return baud==300 ? Profile{300,1600,1800,32} : Profile{1200,1200,2200,8};
+  return baud==300 ? Profile{300,1600,1800,80} : Profile{1200,1200,2200,20};
 }
 class Tx {
   Profile mode=profile(1200);
